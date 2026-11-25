@@ -1,0 +1,11 @@
+# macOS & Windows OS metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+desktop.ini
+
+# Editors & logs
+.vscode/
+.idea/
+*.log
