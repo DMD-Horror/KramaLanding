@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>KramaIsland — Your MacBook Notch, Now a 120 fps Dynamic Island</title>
+  <meta name="description" content="Download KramaIsland for macOS 13+ on Apple Silicon. A native, 120 fps Dynamic Island for MacBook: CoreAudio Volume HUD, universal Now Playing, Windows 11-style Rows × Columns snap layouts, dual-engine notifications with 2FA OTP copy, ⌥ Space launcher, clipboard, file shelf, and Quiet Mode. Free and open source.">
+  <meta property="og:title" content="KramaIsland — Dynamic Island for MacBook">
+  <meta property="og:description" content="Turn your MacBook notch into a native, 120 fps Dynamic Island. Media, CoreAudio volume HUD, window tiling, notifications, clipboard & launcher in one seamless obsidian surface. Free & open source.">
+  <meta property="og:image" content="assets/icon.png">
+  <meta property="og:type" content="website">
+  <meta name="author" content="Mao Seavik">
+  <meta name="theme-color" content="#030407">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <!-- Top Reading Progress Hairline -->
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress-bar" id="scroll-progress-bar"></div></div>
+
+  <!-- KramaIsland-Style Live Notch Toast Banner -->
+  <div class="notch-toast" id="notch-toast" role="status" aria-live="polite" aria-atomic="true">
+    <span class="notch-toast-dot" aria-hidden="true"></span>
+    <span class="notch-toast-text" id="notch-toast-text"></span>
+  </div>
+
+  <!-- Precision Architectural Backdrop + Aurora Orbs -->
+  <div class="ambient-backdrop" aria-hidden="true">
+    <div class="grid-mesh"></div>
+    <div class="aurora-orb aurora-orb--cyan"></div>
+    <div class="aurora-orb aurora-orb--violet"></div>
+    <div class="aurora-orb aurora-orb--rose"></div>
+  </div>
+
+  <!-- Floating Glass Dock Navigation -->
+  <header class="site-header" id="top">
+    <div class="container nav-outer">
+      <div class="nav-pill" id="nav-pill">
+        <a href="#top" class="brand" aria-label="KramaIsland home">
+          <img src="assets/icon.png" alt="" width="30" height="30" class="brand-icon">
+          <span class="brand-name">KramaIsland</span>
+          <span class="version-pill">v1.4.0</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="#features" data-spy="features">Features</a>
+          <a href="#compare" data-spy="compare">Compare</a>
+          <a href="#snap-grid" data-spy="snap-grid">Snap Grid</a>
+          <a href="#showcase" data-spy="showcase">States</a>
+          <a href="#privacy" data-spy="privacy">Privacy</a>
+          <a href="#install" data-spy="install">Install</a>
+          <a href="#changelog" data-spy="changelog">Changelog</a>
+        </nav>
+
+        <div class="nav-actions">
+          <button type="button" class="cmd-trigger" id="cmd-trigger" aria-label="Try KramaIsland Command Launcher (Command K)" aria-haspopup="dialog">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <span class="cmd-trigger-label">Launcher</span>
+            <kbd>⌘K</kbd>
+          </button>
+
+          <a href="https://github.com/Seavik2142/KramaIsland/raw/main/dist/KramaIsland.dmg" download="KramaIsland.dmg" class="btn btn-primary btn-sm" data-download-track>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+            <span>Download</span>
+          </a>
+
+          <button type="button" class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-menu" id="mobile-menu" hidden>
+      <div class="mobile-menu-inner">
+        <a href="#features">Features</a>
+        <a href="#compare">Why KramaIsland</a>
+        <a href="#snap-grid">Custom Snap Grid</a>
+        <a href="#showcase">States Gallery</a>
+        <a href="#privacy">Privacy &amp; Permissions</a>
+        <a href="#shortcuts">Keyboard Shortcuts</a>
+        <a href="#install">Install &amp; Checksum</a>
+        <a href="#changelog">Changelog</a>
+        <button type="button" class="mobile-launcher-btn" id="mobile-cmd-trigger">Open Interactive Launcher (⌘K)</button>
+        <a href="https://github.com/Seavik2142/KramaIsland" target="_blank" rel="noopener noreferrer">View on GitHub ↗</a>
+        <a href="https://github.com/Seavik2142/KramaIsland/raw/main/dist/KramaIsland.dmg" download="KramaIsland.dmg" class="btn btn-primary mobile-download-btn" data-download-track>
+          Download KramaIsland.dmg (v1.4.0 · 3.3 MB)
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero-inner">
+        <a href="#changelog" class="eyebrow">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span class="eyebrow-tag">v1.4.0</span>
+          <span class="eyebrow-sep" aria-hidden="true">·</span>
+          <span>Free &amp; Open Source · macOS 13+ · Apple Silicon</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+
+        <h1 id="hero-title" class="hero-title">
+          <span class="hero-line hero-line--1"><span class="hero-titanium">Your MacBook</span> <span class="notch-word">notch</span><span class="hero-titanium">,</span></span>
+          <span class="hero-line hero-line--2">
+            <span class="text-gradient hero-aurora-text" data-text="now a Dynamic Island.">now a Dynamic Island.</span>
+          </span>
+        </h1>
+
+        <p class="hero-subtitle">
+          <strong>KramaIsland</strong> turns the unused bezel at the top of your Mac into a true-black, 120&nbsp;fps command center —
+          CoreAudio Volume HUD, universal Now Playing, custom <code>Rows × Columns</code> window tiling,
+          2FA OTP notification takeover, and an <kbd>⌥</kbd>&nbsp;<kbd>Space</kbd> launcher.
+        </p>
+
+        <div class="hero-cta">
+          <div class="btn-shimmer-wrap">
+            <a href="https://github.com/Seavik2142/KramaIsland/raw/main/dist/KramaIsland.dmg" download="KramaIsland.dmg" class="btn btn-primary btn-lg" id="hero-download-btn" data-download-track>
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+              <span>Download for Mac</span>
+              <span class="btn-meta">.dmg · 3.3 MB</span>
+            </a>
+          </div>
+
+          <button type="button" class="btn btn-secondary btn-lg" id="hero-launcher-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <span>Try Live Launcher</span>
+            <kbd>⌘K</kbd>
+          </button>
+
+          <a href="https://github.com/Seavik2142/KramaIsland" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-lg">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2.1c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+            <span>GitHub</span>
+          </a>
+        </div>
+
+        <p class="hero-fineprint">
+          MIT Licensed · 13,800+ lines of pure Swift · Zero accounts or analytics ·
+          <a href="#install">Verify SHA-256</a>
+        </p>
+
+        <!-- Interactive MacBook Display & Dynamic Island Stage -->
+        <div class="stage-wrapper" aria-label="Interactive KramaIsland MacBook preview">
+          <div class="stage-toolbar">
+            <div class="state-tabs" role="tablist" aria-label="Switch Dynamic Island state">
+              <button type="button" class="state-tab is-active" role="tab" aria-selected="true" aria-controls="island-stage-panel" data-state="shade">Full Shade</button>
+              <button type="button" class="state-tab" role="tab" aria-selected="false" aria-controls="island-stage-panel" data-state="hover">Hover Glance</button>
+              <button type="button" class="state-tab" role="tab" aria-selected="false" aria-controls="island-stage-panel" data-state="compact">Compact Ears</button>
+              <button type="button" class="state-tab" role="tab" aria-selected="false" aria-controls="island-stage-panel" data-state="volume">Volume HUD</button>
+              <button type="button" class="state-tab" role="tab" aria-selected="false" aria-controls="island-stage-panel" data-state="activity">AirPods</button>
+              <button type="button" class="state-tab" role="tab" aria-selected="false" aria-controls="island-stage-panel" data-state="banner">Banner Alert</button>
+              <button type="button" class="state-tab" role="tab" aria-selected="false" aria-controls="island-stage-panel" data-state="launcher">⌥ Space</button>
+            </div>
+
+            <div class="display-mode-toggle" role="group" aria-label="Display mount mode">
+              <button type="button" class="mode-pill is-active" data-display-mode="notch">MacBook Notch</button>
+              <button type="button" class="mode-pill" data-display-mode="external">External Display</button>
+            </div>
+          </div>
+
+          <div class="macbook-bezel" id="island-stage-panel" role="tabpanel">
+            <div class="macbook-camera-dot" id="macbook-camera-dot" aria-hidden="true"></div>
+            <div class="macbook-screen wp-aurora" id="macbook-screen">
+              <!-- macOS Menu Bar -->
+              <div class="macos-menubar" aria-hidden="true">
+                <div class="menubar-left">
+                  <svg class="apple-mark" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.96 6.32c.68-.83 1.14-1.97 1.01-3.12-.98.04-2.18.65-2.88 1.48-.62.72-1.17 1.89-1.02 3.01 1.1.08 2.21-.55 2.89-1.37"/></svg>
+                  <span class="menubar-bold">KramaIsland</span>
+                  <span>File</span>
+                  <span>Window</span>
+                  <span>Help</span>
+                </div>
+                <div class="menubar-right">
+                  <span class="menubar-indicator menubar-indicator--mic"></span>
+                  <span class="menubar-indicator menubar-indicator--focus"></span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                  <span class="menubar-battery">94%</span>
+                  <span id="live-menubar-clock">Thu 10:14</span>
+                </div>
+              </div>
+
+              <!-- Dynamic Island Mount -->
+              <div class="island-mount state-shade" id="island-mount">
+                <!-- Real Screenshot Container -->
+                <div class="island-image-frame" id="island-image-frame">
+                  <img id="island-preview-img" src="assets/shade.png" alt="KramaIsland Full Shade: clock, quick toggles, running timer, calendar meeting with Join button, Now Playing, file shelf, and clipboard history" width="440" height="760">
+                </div>
+
+                <!-- Interactive CoreAudio Volume HUD Demo -->
+                <div class="volume-hud-demo" id="volume-hud-demo" hidden>
+                  <div class="volume-hud-notch-pill" id="volume-hud-pill">
+                    <div class="volume-hud-top">
+                      <div class="volume-device">
+                        <button type="button" class="volume-mute-btn" id="volume-mute-btn" aria-label="Toggle mute">
+                          <svg id="volume-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                          </svg>
+                        </button>
+                        <div>
+                          <div class="volume-device-name" id="volume-device-name">MacBook Pro Speakers</div>
+                          <div class="volume-device-sub">CoreAudio · Native OSD Replaced</div>
+                        </div>
+                      </div>
+                      <span class="volume-percent" id="volume-percent">68%</span>
+                    </div>
+
+                    <div class="volume-slider-row">
+                      <label class="sr-only" for="volume-demo-range">Interactive volume scrub bar</label>
+                      <input type="range" id="volume-demo-range" min="0" max="100" value="68" class="volume-range">
+                    </div>
+
+                    <div class="volume-device-chips" role="group" aria-label="Switch audio output device">
+                      <button type="button" class="vol-dev-chip is-active" data-device="MacBook Pro Speakers">Speakers</button>
+                      <button type="button" class="vol-dev-chip" data-device="AirPods Pro">AirPods Pro</button>
+                      <button type="button" class="vol-dev-chip" data-device="Studio Display Audio">Studio Display</button>
+                    </div>
+
+                    <div class="volume-hud-footer">
+                      <span>Drag slider or click mute</span>
+                      <span><kbd>⌥</kbd> <kbd>⇧</kbd> Fine 1/64 step</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stage Bottom Bar: Caption + macOS Wallpaper Switcher -->
+              <div class="stage-bottom-bar">
+                <div class="stage-caption" id="stage-caption" aria-live="polite">
+                  <strong>Full Shade</strong> — Quick toggles, Pomodoro timer, next meeting with Join button, Now Playing, File Shelf &amp; Clipboard History.
+                </div>
+
+                <div class="wallpaper-picker" role="group" aria-label="Switch desktop wallpaper behind notch">
+                  <span class="wallpaper-label">Wallpaper</span>
+                  <button type="button" class="wp-swatch wp-swatch--aurora is-active" data-wp="aurora" aria-label="Sequoia Aurora wallpaper" title="Sequoia Aurora"></button>
+                  <button type="button" class="wp-swatch wp-swatch--sonoma" data-wp="sonoma" aria-label="Midnight Sonoma wallpaper" title="Midnight Sonoma"></button>
+                  <button type="button" class="wp-swatch wp-swatch--titanium" data-wp="titanium" aria-label="Titanium Graphite wallpaper" title="Titanium Graphite"></button>
+                </div>
+              </div>
+            </div>
+            <div class="macbook-chin" aria-hidden="true"><span></span></div>
+          </div>
+        </div>
+
+        <!-- Engineering Specs Strip -->
+        <div class="specs-strip" aria-label="Technical highlights">
+          <div class="spec-item spotlight-card" data-reveal>
+            <div class="spec-value">120 fps</div>
+            <div class="spec-label">GPU-composited spring physics</div>
+          </div>
+          <div class="spec-item spotlight-card" data-reveal>
+            <div class="spec-value">3.3 MB</div>
+            <div class="spec-label">Self-contained Swift DMG</div>
+          </div>
+          <div class="spec-item spotlight-card" data-reveal>
+            <div class="spec-value">0</div>
+            <div class="spec-label">Dependencies or trackers</div>
+          </div>
+          <div class="spec-item spotlight-card" data-reveal>
+            <div class="spec-value">13.8k</div>
+            <div class="spec-label">Lines of pure Swift &amp; AppKit</div>
+          </div>
+        </div>
+
+        <!-- Supported macOS Ecosystem Strip -->
+        <div class="ecosystem-strip" aria-label="Supported macOS apps and browsers">
+          <p class="ecosystem-label">Works natively with the macOS apps &amp; browsers you already live in</p>
+          <div class="marquee-shell">
+            <div class="marquee-track">
+              <span class="eco-pill">Apple Music</span>
+              <span class="eco-pill">Spotify</span>
+              <span class="eco-pill">YouTube</span>
+              <span class="eco-pill">Safari</span>
+              <span class="eco-pill">Chrome</span>
+              <span class="eco-pill">Arc</span>
+              <span class="eco-pill">Brave</span>
+              <span class="eco-pill">Edge</span>
+              <span class="eco-pill">Vivaldi</span>
+              <span class="eco-pill">VLC</span>
+              <span class="eco-pill">IINA</span>
+              <span class="eco-pill">Apple TV</span>
+              <span class="eco-pill">Podcasts</span>
+              <span class="eco-pill">Zoom</span>
+              <span class="eco-pill">Google Meet</span>
+              <span class="eco-pill">AirPods Pro</span>
+              <span class="eco-pill">Apple Shortcuts</span>
+              <span class="eco-pill" aria-hidden="true">Apple Music</span>
+              <span class="eco-pill" aria-hidden="true">Spotify</span>
+              <span class="eco-pill" aria-hidden="true">YouTube</span>
+              <span class="eco-pill" aria-hidden="true">Safari</span>
+              <span class="eco-pill" aria-hidden="true">Chrome</span>
+              <span class="eco-pill" aria-hidden="true">Arc</span>
+              <span class="eco-pill" aria-hidden="true">Brave</span>
+              <span class="eco-pill" aria-hidden="true">Edge</span>
+              <span class="eco-pill" aria-hidden="true">Vivaldi</span>
+              <span class="eco-pill" aria-hidden="true">VLC</span>
+              <span class="eco-pill" aria-hidden="true">IINA</span>
+              <span class="eco-pill" aria-hidden="true">Apple TV</span>
+              <span class="eco-pill" aria-hidden="true">Podcasts</span>
+              <span class="eco-pill" aria-hidden="true">Zoom</span>
+              <span class="eco-pill" aria-hidden="true">Google Meet</span>
+              <span class="eco-pill" aria-hidden="true">AirPods Pro</span>
+              <span class="eco-pill" aria-hidden="true">Apple Shortcuts</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-beam" aria-hidden="true"></div>
+
+    <!-- Bento Features Section -->
+    <section id="features" class="section" aria-labelledby="features-heading">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="section-kicker">Everything you need, right under the bezel</p>
+          <h2 id="features-heading" class="section-title">One obsidian surface.<br>Crafted in pure Swift.</h2>
+          <p class="section-subtitle">
+            No Electron bloat, no cloud accounts, no awkward floating windows. KramaIsland uses a fixed-size click-through <code>NSPanel</code> that stays invisible when idle and springs smoothly out of your MacBook notch.
+          </p>
+        </div>
+
+        <div class="bento-grid">
+          <!-- Featured Card 1: CoreAudio Volume HUD -->
+          <article class="bento-card bento-card--wide spotlight-card" data-reveal>
+            <div class="card-badge">Native OSD Replacement</div>
+            <div class="card-icon card-icon--cyan" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            </div>
+            <h3>CoreAudio Volume HUD</h3>
+            <p>
+              Intercepts hardware Volume Up, Volume Down, and Mute keys via <code>CGEventTap</code> so macOS never shows its clunky centered volume popup. Powered directly by CoreAudio listeners with active device icon &amp; name, click-to-mute badge, spring-interpolated scrub bar, elastic 0%/100% bounce, and <kbd>⌥</kbd>&nbsp;<kbd>⇧</kbd> 1/64-step precision.
+            </p>
+            <div class="mini-widget mini-widget--volume">
+              <div class="mini-vol-row">
+                <span class="mini-vol-device">
+                  <span class="mini-dot mini-dot--cyan"></span>
+                  AirPods Pro · CoreAudio
+                </span>
+                <span class="mini-vol-val">72%</span>
+              </div>
+              <div class="mini-track" aria-hidden="true"><div class="mini-track-fill" style="width: 72%;"></div></div>
+            </div>
+            <div class="chip-row">
+              <span class="chip">CoreAudio / AudioToolbox</span>
+              <span class="chip">Zero Polling</span>
+              <span class="chip">Drag-to-Scrub</span>
+            </div>
+          </article>
+
+          <!-- Featured Card 2: Universal Now Playing -->
+          <article class="bento-card bento-card--wide spotlight-card" data-reveal>
+            <div class="card-badge">Multi-Stream Media</div>
+            <div class="card-icon card-icon--violet" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </div>
+            <h3>Universal Now Playing</h3>
+            <p>
+              Works with Apple Music, TV, Podcasts, QuickTime, IINA, Spotify, VLC, Safari, and every Chromium browser (Chrome, Brave, Edge, Arc, Vivaldi, Opera, Dia, Comet). Extracts dominant album-art tint washes, lists active streams as switchable chips, and jumps straight to the playing browser tab on tap.
+            </p>
+            <div class="mini-widget mini-widget--media">
+              <div class="mini-media-left">
+                <div class="mini-art" aria-hidden="true"></div>
+                <div>
+                  <div class="mini-media-title">Midnight City</div>
+                  <div class="mini-media-sub">M83 · Arc · YouTube Music</div>
+                </div>
+              </div>
+              <div class="eq-bars" aria-hidden="true">
+                <span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+            <div class="chip-row">
+              <span class="chip">MediaRemoteAdapter</span>
+              <span class="chip">Per-Tab Switching</span>
+              <span class="chip">Dominant Tint Wash</span>
+            </div>
+          </article>
+
+          <!-- Card 3: Dual-Engine Notifications & 2FA OTP Copy -->
+          <article class="bento-card spotlight-card" data-reveal>
+            <div class="card-icon card-icon--rose" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            </div>
+            <h3>Notification Takeover &amp; 2FA OTP</h3>
+            <p>
+              Dual-engine capture (SQLite/WAL + Live Accessibility) mirrors alerts from all apps and browsers, auto-dismisses macOS's top-right banners, extracts meeting Join links, queues bursts (<code>+N</code>), and detects 2FA codes automatically.
+            </p>
+            <div class="mini-widget mini-widget--otp">
+              <div class="mini-otp-text">
+                <span class="mini-otp-app">MESSAGES · 2FA</span>
+                <strong>Code: 482 910</strong>
+              </div>
+              <button type="button" class="copy-btn mini-otp-btn" data-copy="482910" data-toast="Copied 2FA OTP code 482910" aria-label="Test copying sample 2FA OTP code">Copy OTP</button>
+            </div>
+          </article>
+
+          <!-- Card 4: Launcher -->
+          <article class="bento-card spotlight-card" data-reveal>
+            <div class="card-icon card-icon--amber" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            </div>
+            <h3><kbd>⌥</kbd> <kbd>Space</kbd> Command Launcher</h3>
+            <p>
+              Fuzzy app search ranked by frequency, Spotlight files, recursive-descent calculator, unit converter (<code>5 km to mi</code>, <code>100 f to c</code>), clipboard search (<code>clip</code>), Pomodoro starts (<code>timer 25</code>), and quick system actions.
+            </p>
+            <button type="button" class="mini-launcher-cta" data-open-cmd>
+              <span>Try math or unit conversion live</span>
+              <kbd>⌘K</kbd>
+            </button>
+          </article>
+
+          <!-- Card 5: Quiet Mode & Live Indicators -->
+          <article class="bento-card spotlight-card" data-reveal>
+            <div class="card-icon card-icon--violet" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8.7 3.9A6 6 0 0 1 18 8c0 2.6.4 4.5 1 5.9"/><path d="M6 8c0 7-3 9-3 9h14"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/><path d="m3 3 18 18"/></svg>
+            </div>
+            <h3>Quiet Mode &amp; Status Indicators</h3>
+            <p>
+              One switch silences all popups — manually, for 1 hour, or synced with macOS Focus — while letting finished timers or low battery break through. Colored notch marks track Mic, Camera, Focus &amp; Keep Awake.
+            </p>
+            <div class="mini-widget mini-widget--quiet">
+              <div class="indicator-pills">
+                <span class="ind-pill ind-pill--mic">Mic</span>
+                <span class="ind-pill ind-pill--cam">Cam</span>
+                <span class="ind-pill ind-pill--focus">Focus</span>
+              </div>
+              <button type="button" class="quiet-toggle-btn" id="quiet-demo-toggle" aria-pressed="false">Quiet: Off</button>
+            </div>
+          </article>
+
+          <!-- Card 6: Resizing & Multi-Display -->
+          <article class="bento-card spotlight-card" data-reveal>
+            <div class="card-icon card-icon--green" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg>
+            </div>
+            <h3>Custom Sizing &amp; Multi-Display</h3>
+            <p>
+              Tune open width (<code>360–760 pt</code>), vertical height (<code>320–860 pt</code>), and compact ears with live preview sliders or drag the Shade's corner grip directly. Pin to Auto, Main, or any external display.
+            </p>
+          </article>
+
+          <!-- Card 7: Shelf, Clipboard & Timer -->
+          <article class="bento-card spotlight-card" data-reveal>
+            <div class="card-icon card-icon--cyan" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13h5l2 3h4l2-3h5"/><path d="M5 7h14l2 6v6H3v-6z"/></svg>
+            </div>
+            <h3>Shelf, Clipboard, Timer &amp; Mirror</h3>
+            <p>
+              Drag files onto the notch to park or AirDrop them. Boot-session Clipboard History skips password managers and auto-wipes on shutdown. Includes Pomodoro ring, Calendar one-tap Join, and instant Camera Mirror.
+            </p>
+          </article>
+
+          <!-- Card 8: Live Activities & Privacy -->
+          <article class="bento-card spotlight-card" data-reveal>
+            <div class="card-icon card-icon--green" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <h3>Live Activities &amp; Strict Privacy</h3>
+            <p>
+              AirPods L/R/Case battery popups, charger &amp; low-battery alerts, live <code>~/Downloads</code> progress rings, and Apple Shortcuts JSON activities. Zero servers, zero telemetry, Strict Offline Mode, and transparent TCC controls.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-beam" aria-hidden="true"></div>
+
+    <!-- Why KramaIsland: Stock macOS vs. With KramaIsland -->
+    <section id="compare" class="section" aria-labelledby="compare-heading">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="section-kicker">Why upgrade your notch</p>
+          <h2 id="compare-heading" class="section-title">Replaces five separate Mac utilities.<br>Zero clutter. Zero subscriptions.</h2>
+          <p class="section-subtitle">
+            Instead of stacking paid menu bar apps for notch media, volume HUDs, clipboard managers, file shelves, and window tiling, KramaIsland unifies them into one lightweight native Swift app.
+          </p>
+        </div>
+
+        <div class="compare-table-shell spotlight-card" data-reveal>
+          <div class="compare-grid compare-head">
+            <div class="compare-col-cap">Everyday Workflow</div>
+            <div class="compare-col-old">Default macOS</div>
+            <div class="compare-col-new">With KramaIsland</div>
+          </div>
+
+          <div class="compare-grid compare-row">
+            <div class="compare-col-cap"><strong>MacBook Notch Space</strong></div>
+            <div class="compare-col-old">Static black camera cutout with zero interactive value.</div>
+            <div class="compare-col-new"><span class="check-dot" aria-hidden="true"></span>120 fps Dynamic Island with live media ears, hover glance &amp; full Shade.</div>
+          </div>
+
+          <div class="compare-grid compare-row">
+            <div class="compare-col-cap"><strong>Hardware Volume Keys</strong></div>
+            <div class="compare-col-old">Large centered translucent square blocking slides, video, or code.</div>
+            <div class="compare-col-new"><span class="check-dot" aria-hidden="true"></span>Native CoreAudio HUD inside the notch with scrub bar, device name &amp; click-to-mute.</div>
+          </div>
+
+          <div class="compare-grid compare-row">
+            <div class="compare-col-cap"><strong>Notifications &amp; 2FA Codes</strong></div>
+            <div class="compare-col-old">Top-right banners stack and vanish before you copy an OTP code.</div>
+            <div class="compare-col-new"><span class="check-dot" aria-hidden="true"></span>Notch banner takeover with one-click 2FA Copy, meeting Join links &amp; app-grouped Shade.</div>
+          </div>
+
+          <div class="compare-grid compare-row">
+            <div class="compare-col-cap"><strong>Multi-Window Tiling</strong></div>
+            <div class="compare-col-old">Basic split halves with no custom project grids or gap spacing.</div>
+            <div class="compare-col-new"><span class="check-dot" aria-hidden="true"></span>Custom <code>1–4 × 1–4</code> Rows × Columns tiling (<code>⌃⌥G</code>), interactive cell map &amp; gap control.</div>
+          </div>
+
+          <div class="compare-grid compare-row">
+            <div class="compare-col-cap"><strong>Clipboard &amp; File Drop</strong></div>
+            <div class="compare-col-old">Single-item clipboard and manual drag-and-drop across Spaces.</div>
+            <div class="compare-col-new"><span class="check-dot" aria-hidden="true"></span>Boot-session clipboard history (auto-wipes on shutdown) + AirDrop File Shelf.</div>
+          </div>
+
+          <div class="compare-grid compare-row">
+            <div class="compare-col-cap"><strong>Cost &amp; Transparency</strong></div>
+            <div class="compare-col-old">Multiple paid closed-source utilities ($15–$50+ combined).</div>
+            <div class="compare-col-new"><span class="check-dot" aria-hidden="true"></span><strong>Free forever</strong> · MIT Open Source · 3.3 MB · 100% on-device.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-beam" aria-hidden="true"></div>
+
+    <!-- Interactive Custom Project Grid Showcase -->
+    <section id="snap-grid" class="section" aria-labelledby="snap-grid-heading">
+      <div class="container">
+        <div class="snap-layout-panel spotlight-card" data-reveal>
+          <div class="snap-copy">
+            <p class="section-kicker">Windows 11-Style Window Tiling</p>
+            <h2 id="snap-grid-heading" class="section-title">Custom <code>Rows × Columns</code> Project Grid.</h2>
+            <p class="section-subtitle">
+              Snap and tile multiple apps — or multiple windows of the same app — into any <strong>1–4 Rows × 1–4 Columns</strong> layout with configurable gaps (<code>0 pt</code>, <code>6 pt</code>, <code>12 pt</code>). Trigger directly from the Shade's clickable cell map, Menu Bar, Launcher, or <kbd>⌃</kbd>&nbsp;<kbd>⌥</kbd>&nbsp;<kbd>G</kbd>.
+            </p>
+
+            <div class="grid-controls" aria-label="Interactive grid configurator">
+              <div class="preset-row">
+                <button type="button" class="preset-btn" data-rows="1" data-cols="2">1×2 Split</button>
+                <button type="button" class="preset-btn" data-rows="1" data-cols="3">1×3 Columns</button>
+                <button type="button" class="preset-btn is-active" data-rows="2" data-cols="2">2×2 Quad</button>
+                <button type="button" class="preset-btn" data-rows="2" data-cols="3">2×3 Studio</button>
+                <button type="button" class="preset-btn" data-rows="3" data-cols="3">3×3 Matrix</button>
+              </div>
+
+              <div class="stepper-group">
+                <div class="stepper">
+                  <span class="stepper-label">Rows</span>
+                  <div class="stepper-controls">
+                    <button type="button" class="stepper-btn" id="rows-dec" aria-label="Decrease rows">−</button>
+                    <span class="stepper-val" id="rows-val">2</span>
+                    <button type="button" class="stepper-btn" id="rows-inc" aria-label="Increase rows">+</button>
+                  </div>
+                </div>
+                <div class="stepper">
+                  <span class="stepper-label">Columns</span>
+                  <div class="stepper-controls">
+                    <button type="button" class="stepper-btn" id="cols-dec" aria-label="Decrease columns">−</button>
+                    <span class="stepper-val" id="cols-val">2</span>
+                    <button type="button" class="stepper-btn" id="cols-inc" aria-label="Increase columns">+</button>
+                  </div>
+                </div>
+                <div class="stepper">
+                  <span class="stepper-label">Gap</span>
+                  <div class="gap-pills" role="group" aria-label="Window gap spacing">
+                    <button type="button" class="gap-btn" data-gap="0">0pt</button>
+                    <button type="button" class="gap-btn is-active" data-gap="6">6pt</button>
+                    <button type="button" class="gap-btn" data-gap="12">12pt</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="snap-visualizer" aria-label="Live preview of tiled macOS windows">
+            <div class="snap-visualizer-bar">
+              <div class="window-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+              <span class="snap-badge" id="snap-grid-badge">2×2 Grid · 6 pt gap · ⌃⌥G</span>
+            </div>
+            <div class="snap-screen" id="snap-screen" style="--grid-rows: 2; --grid-cols: 2; --grid-gap: 6px;"></div>
+            <p class="snap-hint">Click any cell above to preview snapping your active window into that exact slot.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-beam" aria-hidden="true"></div>
+
+    <!-- States Gallery (Real macOS Screenshots + Lightbox Zoom) -->
+    <section id="showcase" class="section" aria-labelledby="showcase-heading">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="section-kicker">One surface, every state</p>
+          <h2 id="showcase-heading" class="section-title">Only grows as much as it needs to.</h2>
+          <p class="section-subtitle">
+            Idle, KramaIsland disappears completely into the bezel. Click any screen below to inspect the crisp native macOS rendering up close.
+          </p>
+        </div>
+
+        <div class="gallery-grid">
+          <figure class="gallery-card" data-reveal>
+            <button type="button" class="gallery-trigger" data-lightbox="0" aria-label="Zoom into Compact Ears screenshot">
+              <div class="gallery-display gallery-display--narrow">
+                <span class="zoom-chip" aria-hidden="true">Inspect ↗</span>
+                <div class="gallery-island"><img src="assets/compact.png" alt="Compact notch ears showing album art on the left and animated level bars on the right" loading="lazy"></div>
+              </div>
+            </button>
+            <figcaption>
+              <strong>Compact Ears</strong>
+              <span>Balanced 34 pt ears show album artwork, bouncing audio bars, or countdown rings beside the notch.</span>
+            </figcaption>
+          </figure>
+
+          <figure class="gallery-card" data-reveal>
+            <button type="button" class="gallery-trigger" data-lightbox="1" aria-label="Zoom into Live Activity HUD screenshot">
+              <div class="gallery-display">
+                <span class="zoom-chip" aria-hidden="true">Inspect ↗</span>
+                <div class="gallery-island"><img src="assets/activity.png" alt="Live Activity HUD displaying AirPods Pro connected with Left 84%, Right 82%, and Case 61% battery" loading="lazy"></div>
+              </div>
+            </button>
+            <figcaption>
+              <strong>Live Activity HUD</strong>
+              <span>AirPods with L/R/Case battery, charger status, downloads progress, and Shortcuts JSON activities.</span>
+            </figcaption>
+          </figure>
+
+          <figure class="gallery-card" data-reveal>
+            <button type="button" class="gallery-trigger" data-lightbox="2" aria-label="Zoom into Banner Takeover screenshot">
+              <div class="gallery-display">
+                <span class="zoom-chip" aria-hidden="true">Inspect ↗</span>
+                <div class="gallery-island"><img src="assets/banner.png" alt="Messages notification banner dropping smoothly out of the notch" loading="lazy"></div>
+              </div>
+            </button>
+            <figcaption>
+              <strong>Banner Takeover</strong>
+              <span>Notifications drop cleanly from the notch while auto-dismissing macOS's duplicate top-right popups.</span>
+            </figcaption>
+          </figure>
+
+          <figure class="gallery-card gallery-card--wide" data-reveal>
+            <button type="button" class="gallery-trigger" data-lightbox="3" aria-label="Zoom into 120 fps Hover Glance screenshot">
+              <div class="gallery-display gallery-display--tall">
+                <span class="zoom-chip" aria-hidden="true">Inspect ↗</span>
+                <div class="gallery-island gallery-island--hover"><img src="assets/hover.png" alt="Hover glance showing time, Do Not Disturb pill, battery, unread badge, running timer, calendar event, Now Playing, and latest message" loading="lazy"></div>
+              </div>
+            </button>
+            <figcaption>
+              <strong>120 fps Hover Glance</strong>
+              <span>Instant readout for clock, Focus mode, battery, unread bell, active timer, upcoming meeting, and live playback.</span>
+            </figcaption>
+          </figure>
+
+          <figure class="gallery-card gallery-card--wide" data-reveal>
+            <button type="button" class="gallery-trigger" data-lightbox="4" aria-label="Zoom into Option Space Launcher screenshot">
+              <div class="gallery-display gallery-display--tall">
+                <span class="zoom-chip" aria-hidden="true">Inspect ↗</span>
+                <div class="gallery-island gallery-island--launcher"><img src="assets/launcher.png" alt="KramaIsland Launcher calculating 5 km to mi equals 3.10685596 mi" loading="lazy"></div>
+              </div>
+            </button>
+            <figcaption>
+              <strong>⌥ Space Launcher</strong>
+              <span>Launch apps, find Spotlight files, calculate expressions, convert units, search clipboard, and run quick actions.</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-beam" aria-hidden="true"></div>
+
+    <!-- Privacy & Permissions Trust Architecture -->
+    <section id="privacy" class="section" aria-labelledby="privacy-heading">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="section-kicker">Security &amp; Transparency</p>
+          <h2 id="privacy-heading" class="section-title">100% on-device.<br>Every permission explained upfront.</h2>
+          <p class="section-subtitle">
+            A macOS system utility should earn your trust line by line. KramaIsland requests each TCC permission strictly on demand, never calls a proprietary backend, and keeps your clipboard scoped to the current boot session.
+          </p>
+        </div>
+
+        <div class="trust-pillars">
+          <div class="trust-card spotlight-card" data-reveal>
+            <div class="trust-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <h3>Zero Telemetry &amp; Offline Mode</h3>
+            <p>No accounts, no analytics, no crash-upload servers. Enable <strong>Strict Offline Mode</strong> in Settings to disable even the optional daily GitHub release check.</p>
+          </div>
+
+          <div class="trust-card spotlight-card" data-reveal>
+            <div class="trust-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h3>Boot-Session Ephemeral Clipboard</h3>
+            <p>Skips password-manager concealed items automatically, binds history to <code>kern.boottime</code>, and wipes clipboard history on shutdown or restart.</p>
+          </div>
+
+          <div class="trust-card spotlight-card" data-reveal>
+            <div class="trust-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+            </div>
+            <h3>Signature-Verified Updates</h3>
+            <p>In-place updates verify that the incoming release matches your installed cryptographic certificate before swapping — keeping all permissions intact.</p>
+          </div>
+        </div>
+
+        <div class="perm-table-wrap" data-reveal>
+          <table class="perm-table">
+            <thead>
+              <tr>
+                <th scope="col">macOS Permission</th>
+                <th scope="col">What It Unlocks</th>
+                <th scope="col">Requested</th>
+                <th scope="col">Data Scope</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Accessibility</strong></td>
+                <td>Global <code>⌥ Space</code> hotkey, native Volume HUD replacement, window snapping &amp; <code>R×C</code> tiling</td>
+                <td><span class="scope-pill">On Demand</span></td>
+                <td>Local events only</td>
+              </tr>
+              <tr>
+                <td><strong>Full Disk Access</strong></td>
+                <td>Read-only mirror of Notification Center SQLite/WAL store for banners, Shade &amp; 2FA OTP Copy</td>
+                <td><span class="scope-pill">Optional</span></td>
+                <td>Read-only · On-device</td>
+              </tr>
+              <tr>
+                <td><strong>Calendar</strong></td>
+                <td>Next upcoming meeting preview &amp; one-click Zoom / Meet / Teams Join buttons</td>
+                <td><span class="scope-pill">When Enabled</span></td>
+                <td>EventKit · Local</td>
+              </tr>
+              <tr>
+                <td><strong>Camera</strong></td>
+                <td>Instant Camera Mirror check inside the Shade before video calls</td>
+                <td><span class="scope-pill">When Opened</span></td>
+                <td>Never recorded</td>
+              </tr>
+              <tr>
+                <td><strong>Bluetooth</strong></td>
+                <td>AirPods &amp; Bluetooth connection Live Activities with Left / Right / Case battery</td>
+                <td><span class="scope-pill">Deferred</span></td>
+                <td>IOBluetooth · Local</td>
+              </tr>
+              <tr>
+                <td><strong>Automation</strong></td>
+                <td>Per-tab Safari/Chromium playback control, Music/Spotify/VLC &amp; Dark Mode toggle</td>
+                <td><span class="scope-pill">Per App</span></td>
+                <td>Apple Events · Local</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-beam" aria-hidden="true"></div>
+
+    <!-- Filterable Keyboard Shortcuts Cheat Sheet -->
+    <section id="shortcuts" class="section" aria-labelledby="shortcuts-heading">
+      <div class="container">
+        <div class="shortcuts-head-row" data-reveal>
+          <div class="section-header" style="margin-bottom: 0;">
+            <p class="section-kicker">Keyboard-first workflow</p>
+            <h2 id="shortcuts-heading" class="section-title">Fast from every keystroke.</h2>
+            <p class="section-subtitle">
+              Control volume, tile project grids, or open the launcher without touching your trackpad.
+            </p>
+          </div>
+
+          <div class="shortcut-filters" role="group" aria-label="Filter keyboard shortcuts by category">
+            <button type="button" class="filter-pill is-active" data-sc-filter="all">All</button>
+            <button type="button" class="filter-pill" data-sc-filter="launcher">Launcher</button>
+            <button type="button" class="filter-pill" data-sc-filter="audio">Audio</button>
+            <button type="button" class="filter-pill" data-sc-filter="windows">Window Tiling</button>
+          </div>
+        </div>
+
+        <div class="shortcuts-grid" id="shortcuts-grid">
+          <div class="shortcut-row spotlight-card" data-sc-cat="launcher" data-reveal>
+            <div class="shortcut-keys"><kbd>⌥</kbd> <kbd>Space</kbd></div>
+            <div class="shortcut-desc">Open / close the KramaIsland Launcher <em>(configurable)</em></div>
+          </div>
+          <div class="shortcut-row spotlight-card" data-sc-cat="audio" data-reveal>
+            <div class="shortcut-keys"><kbd>Vol ↑</kbd> <kbd>Vol ↓</kbd> <kbd>Mute</kbd></div>
+            <div class="shortcut-desc">120 fps CoreAudio Volume HUD <em>(replaces macOS OSD)</em></div>
+          </div>
+          <div class="shortcut-row spotlight-card" data-sc-cat="audio" data-reveal>
+            <div class="shortcut-keys"><kbd>⌥</kbd> <kbd>⇧</kbd> <kbd>Vol ↑ / ↓</kbd></div>
+            <div class="shortcut-desc">Fine 1/64-step micro volume precision</div>
+          </div>
+          <div class="shortcut-row spotlight-card" data-sc-cat="windows" data-reveal>
+            <div class="shortcut-keys"><kbd>⌃</kbd> <kbd>⌥</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd></div>
+            <div class="shortcut-desc">Snap active window to Left, Right, Top, or Bottom half</div>
+          </div>
+          <div class="shortcut-row spotlight-card" data-sc-cat="windows" data-reveal>
+            <div class="shortcut-keys"><kbd>⌃</kbd> <kbd>⌥</kbd> <kbd>↩</kbd></div>
+            <div class="shortcut-desc">Maximize / fill active display</div>
+          </div>
+          <div class="shortcut-row spotlight-card" data-sc-cat="windows" data-reveal>
+            <div class="shortcut-keys"><kbd>⌃</kbd> <kbd>⌥</kbd> <kbd>C</kbd> &amp; <kbd>⌫</kbd></div>
+            <div class="shortcut-desc">Center active window or restore previous size &amp; position</div>
+          </div>
+          <div class="shortcut-row spotlight-card" data-sc-cat="windows" data-reveal>
+            <div class="shortcut-keys"><kbd>⌃</kbd> <kbd>⌥</kbd> <kbd>2</kbd> / <kbd>3</kbd> / <kbd>4</kbd></div>
+            <div class="shortcut-desc">Tile 2 apps (50/50), 3 apps (columns), or 4 apps (2×2 grid)</div>
+          </div>
+          <div class="shortcut-row spotlight-card" data-sc-cat="windows" data-reveal>
+            <div class="shortcut-keys"><kbd>⌃</kbd> <kbd>⌥</kbd> <kbd>G</kbd></div>
+            <div class="shortcut-desc">Tile open project windows into your custom <code>Rows × Columns</code> grid</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-beam" aria-hidden="true"></div>
+
+    <!-- Installation, Gatekeeper & SHA-256 Verification -->
+    <section id="install" class="section" aria-labelledby="install-heading">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <p class="section-kicker">Install in 60 seconds</p>
+          <h2 id="install-heading" class="section-title">Download once. Updates itself forever.</h2>
+          <p class="section-subtitle">
+            Requires <strong>macOS 13 Ventura or later</strong> on <strong>Apple Silicon</strong> (M1, M2, M3, M4). Runs silently as a lightweight menu bar utility with no Dock icon.
+          </p>
+        </div>
+
+        <ol class="steps-grid">
+          <li class="step-card spotlight-card" data-reveal>
+            <div class="step-number">01</div>
+            <h3>Download &amp; Drag</h3>
+            <p>
+              Grab <a href="https://github.com/Seavik2142/KramaIsland/raw/main/dist/KramaIsland.dmg" download="KramaIsland.dmg" class="inline-link" data-download-track>KramaIsland.dmg</a> (3.3&nbsp;MB) and drag <strong>KramaIsland</strong> into your <strong>Applications</strong> folder.
+            </p>
+          </li>
+
+          <li class="step-card spotlight-card" data-reveal>
+            <div class="step-number">02</div>
+            <h3>Confirm First Launch</h3>
+            <p>
+              Because KramaIsland is free, open source, and signed with its own local certificate rather than a paid Apple Developer ID, confirm launch once in macOS Gatekeeper (see guide below).
+            </p>
+          </li>
+
+          <li class="step-card spotlight-card" data-reveal>
+            <div class="step-number">03</div>
+            <h3>Grant Permissions On Demand</h3>
+            <p>
+              Open <strong>Settings ▸ Privacy</strong> for one-click status checks: Accessibility, Full Disk Access, plus optional Calendar, Camera, Bluetooth &amp; Automation.
+            </p>
+          </li>
+
+          <li class="step-card spotlight-card" data-reveal>
+            <div class="step-number">04</div>
+            <h3>Automatic In-Place Updates</h3>
+            <p>
+              That's your last DMG download. KramaIsland checks GitHub Releases daily (toggleable offline) and installs signature-verified updates in place while preserving every permission.
+            </p>
+          </li>
+        </ol>
+
+        <!-- Gatekeeper Helper Tabs -->
+        <div class="gatekeeper-box" data-reveal>
+          <div class="gatekeeper-top">
+            <div>
+              <h3>First-launch Gatekeeper guide</h3>
+              <p>Choose your macOS version or run the one-line Terminal command to clear the download quarantine flag.</p>
+            </div>
+            <div class="gatekeeper-tabs" role="tablist" aria-label="macOS version instructions">
+              <button type="button" class="gk-tab is-active" role="tab" aria-selected="true" data-gk="sequoia">macOS 15+ Sequoia</button>
+              <button type="button" class="gk-tab" role="tab" aria-selected="false" data-gk="sonoma">macOS 13–14</button>
+              <button type="button" class="gk-tab" role="tab" aria-selected="false" data-gk="terminal">Terminal</button>
+            </div>
+          </div>
+
+          <div class="gatekeeper-body" id="gk-panel-sequoia">
+            <p>When macOS says <em>"Apple could not verify KramaIsland is free of malware"</em>, click <strong>Done</strong>, then open <strong>System Settings → Privacy &amp; Security</strong>, scroll down to <em>"KramaIsland was blocked"</em>, and click <strong>Open Anyway</strong>.</p>
+          </div>
+          <div class="gatekeeper-body" id="gk-panel-sonoma" hidden>
+            <p>Open your <strong>Applications</strong> folder, right-click <strong>KramaIsland.app</strong>, choose <strong>Open</strong>, and confirm <strong>Open</strong> in the dialog. You only ever need to do this once.</p>
+          </div>
+          <div class="gatekeeper-body" id="gk-panel-terminal" hidden>
+            <div class="code-line">
+              <code>xattr -dr com.apple.quarantine /Applications/KramaIsland.app</code>
+              <button type="button" class="copy-btn" data-copy="xattr -dr com.apple.quarantine /Applications/KramaIsland.app" data-toast="Copied quarantine command" aria-label="Copy Terminal quarantine command">Copy</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verified SHA-256 Checksum Bar -->
+        <div class="checksum-card" data-reveal>
+          <div class="checksum-meta">
+            <span class="checksum-badge">SHA-256 Verified</span>
+            <span class="checksum-file">KramaIsland.dmg · v1.4.0 · 3,473,061 bytes</span>
+          </div>
+          <div class="checksum-row">
+            <code class="checksum-hash">eb91b7644debbc3743a85f6ea0f678667afc9be5699b524b09b7b0cceffaec18</code>
+            <button type="button" class="copy-btn" data-copy="echo 'eb91b7644debbc3743a85f6ea0f678667afc9be5699b524b09b7b0cceffaec18  KramaIsland.dmg' | shasum -a 256 -c" data-toast="Copied SHA-256 verification command" aria-label="Copy SHA-256 verification command">Copy Verify Command</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-beam" aria-hidden="true"></div>
+
+    <!-- Open Source & Build From Source -->
+    <section id="source" class="section" aria-labelledby="source-heading">
+      <div class="container source-grid">
+        <div data-reveal>
+          <p class="section-kicker">Open Source &amp; Extensible</p>
+          <h2 id="source-heading" class="section-title">Pure Swift, SwiftUI &amp; AppKit.<br>Nothing hidden.</h2>
+          <p class="section-subtitle">
+            Inspect every line of the 13,800+ line Swift codebase that touches your audio, notifications, or windows. One Swift package, zero third-party dependencies, MIT licensed — plus JSON custom Live Activities for Apple Shortcuts.
+          </p>
+          <div class="chip-row">
+            <span class="chip">Swift 5.9+</span>
+            <span class="chip">SwiftUI + AppKit</span>
+            <span class="chip">CoreAudio</span>
+            <span class="chip">macOS 13+</span>
+            <span class="chip">Apple Silicon</span>
+            <span class="chip">MIT License</span>
+          </div>
+        </div>
+
+        <div class="code-stack" data-reveal>
+          <div class="code-card">
+            <div class="code-card-head">
+              <div class="code-card-title">
+                <span class="window-dots window-dots--sm" aria-hidden="true"><span></span><span></span><span></span></span>
+                <span>Build &amp; run from source</span>
+              </div>
+              <button type="button" class="copy-btn" data-copy="git clone https://github.com/Seavik2142/KramaIsland.git&#10;cd KramaIsland&#10;swift run" data-toast="Copied git clone & swift run commands" aria-label="Copy build commands">Copy</button>
+            </div>
+            <pre><code><span class="code-comment"># clone and run locally</span>
+git clone https://github.com/Seavik2142/KramaIsland.git
+cd KramaIsland
+swift run
+
+<span class="code-comment"># build signed .app &amp; distributable .dmg</span>
+scripts/make-dmg.sh 1.4.0</code></pre>
+          </div>
+
+          <div class="code-card">
+            <div class="code-card-head">
+              <div class="code-card-title">
+                <span class="window-dots window-dots--sm" aria-hidden="true"><span></span><span></span><span></span></span>
+                <span>Push a custom Live Activity via Shortcuts</span>
+              </div>
+              <button type="button" class="copy-btn" data-copy='echo &apos;{"title":"Build Complete","subtitle":"main · 12s","symbol":"hammer.fill","progress":1,"seconds":5}&apos; > ~/Library/Application\ Support/KramaIsland/activity.json' data-toast="Copied Shortcuts activity.json snippet" aria-label="Copy Shortcuts JSON command">Copy</button>
+            </div>
+            <pre><code>echo '{"title":"Build Complete","subtitle":"main · 12s","symbol":"hammer.fill","progress":1,"seconds":5}' \
+  &gt; ~/Library/Application\ Support/KramaIsland/activity.json</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-beam" aria-hidden="true"></div>
+
+    <!-- Release History / Engineering Changelog -->
+    <section id="changelog" class="section" aria-labelledby="changelog-heading">
+      <div class="container">
+        <div class="changelog-head" data-reveal>
+          <div class="section-header" style="margin-bottom: 0;">
+            <p class="section-kicker">Active Development</p>
+            <h2 id="changelog-heading" class="section-title">Shipped in the open.</h2>
+            <p class="section-subtitle">
+              Rapid, focused releases driven by real macOS workflow needs — with signature-verified in-place updates built in.
+            </p>
+          </div>
+          <a href="https://github.com/Seavik2142/KramaIsland/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">Full CHANGELOG.md ↗</a>
+        </div>
+
+        <ol class="timeline">
+          <li class="timeline-item" data-reveal>
+            <div class="timeline-meta">
+              <span class="release-tag release-tag--latest">v1.4.0+ · Latest</span>
+              <time datetime="2026-11-25">Nov 2026</time>
+            </div>
+            <div class="timeline-body spotlight-card">
+              <h3>Custom Project Grid, H/V Resizing, Notification Takeover &amp; Quiet Mode</h3>
+              <ul>
+                <li>Added custom <code>1–4 × 1–4</code> Rows × Columns window tiling with interactive Shade cell map &amp; <code>⌃⌥G</code> hotkey.</li>
+                <li>Added full horizontal (<code>360–760 pt</code>) &amp; vertical (<code>320–860 pt</code>) Dynamic Island sizing plus corner drag-to-resize.</li>
+                <li>Upgraded notifications with dual-engine WAL + Live Accessibility capture, native banner takeover &amp; one-click 2FA OTP Copy.</li>
+                <li>Introduced <strong>Quiet Mode</strong> (manual, 1-hour timer, or synced with macOS Focus) with breakthrough exceptions.</li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="timeline-item" data-reveal>
+            <div class="timeline-meta">
+              <span class="release-tag">v1.3.0 – 1.3.2</span>
+              <time datetime="2026-10-31">Oct 2026</time>
+            </div>
+            <div class="timeline-body spotlight-card">
+              <h3>Universal System Now Playing Feed &amp; Multi-Stream Stability</h3>
+              <ul>
+                <li>Shipped <code>MediaRemoteAdapter</code> so Apple TV, Podcasts, QuickTime, IINA, and browsers work out of the box without extra permissions.</li>
+                <li>Added isolated dispatch queues and watchdogs so multi-app streams stay pinned cleanly as switchable source chips.</li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="timeline-item" data-reveal>
+            <div class="timeline-meta">
+              <span class="release-tag">v1.2.0</span>
+              <time datetime="2026-10-31">Oct 2026</time>
+            </div>
+            <div class="timeline-body spotlight-card">
+              <h3>In-App Signature-Verified Self-Updater</h3>
+              <ul>
+                <li>Added daily optional GitHub Releases check and one-click <strong>Update Now</strong> that verifies certificate identity and preserves all macOS permissions.</li>
+                <li>Refined island drop shadows to eliminate menu-bar halo bleed.</li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="timeline-item" data-reveal>
+            <div class="timeline-meta">
+              <span class="release-tag">v1.0.0 – 1.1.1</span>
+              <time datetime="2026-10-29">Oct 2026</time>
+            </div>
+            <div class="timeline-body spotlight-card">
+              <h3>Foundation, Stable Signing Identity &amp; Multi-Browser Support</h3>
+              <ul>
+                <li>Launched KramaIsland with Safari + all Chromium browsers (Chrome, Brave, Edge, Arc, Vivaldi, Opera) and automatic TCC permission repair.</li>
+              </ul>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <div class="section-beam" aria-hidden="true"></div>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section" aria-labelledby="faq-heading">
+      <div class="container faq-container">
+        <div class="section-header section-header--center" data-reveal>
+          <p class="section-kicker">Questions &amp; Answers</p>
+          <h2 id="faq-heading" class="section-title">Everything you might wonder.</h2>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item" open data-reveal>
+            <summary>Does KramaIsland work on external monitors or non-notch Macs?</summary>
+            <p>Yes. On notched MacBooks it measures the real physical notch from <code>NSScreen</code> with smooth concave top shoulders. On external monitors or non-notch displays, it renders a sleek unified compact Dynamic Island pill at the top center — and you can pin it to Auto, Main, or any specific connected display in Settings.</p>
+          </details>
+          <details class="faq-item" data-reveal>
+            <summary>Does KramaIsland send any notifications, clipboard items, or analytics to a server?</summary>
+            <p>Never. There are no accounts, no analytics, and no backend servers. Everything is processed strictly on your Mac. Clipboard history stays inside your current boot session and auto-wipes on shutdown/restart. The only optional network request is a daily check against GitHub Releases for app updates, which you can disable with Strict Offline Mode.</p>
+          </details>
+          <details class="faq-item" data-reveal>
+            <summary>Allowed a permission in System Settings, but KramaIsland says it's missing?</summary>
+            <p>macOS binds TCC permissions to the cryptographic signature of the specific app build. Since v1.1.1, KramaIsland automatically detects stale grants after major signature changes and offers a one-click <strong>Reset…</strong> button right inside <strong>Settings ▸ Permissions</strong> so you can re-grant cleanly.</p>
+          </details>
+          <details class="faq-item" data-reveal>
+            <summary>How do I enable full per-tab media controls in Chrome, Arc, Brave, or Safari?</summary>
+            <p>Every browser already works out of the box via the system Now Playing feed with zero permission required. To unlock per-tab source chips and one-click tab jumping, enable <strong>View ▸ Developer ▸ Allow JavaScript from Apple Events</strong> in Chromium browsers, or <strong>Develop ▸ Allow JavaScript from Apple Events</strong> in Safari.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Maker & Final Download CTA -->
+    <section id="download" class="section" aria-labelledby="final-cta-heading">
+      <div class="container">
+        <div class="final-cta-card spotlight-card" data-reveal>
+          <img src="assets/icon.png" alt="KramaIsland App Icon" width="76" height="76" class="final-cta-icon">
+          <h2 id="final-cta-heading">Make your MacBook notch earn its space.</h2>
+          <p>Download KramaIsland v1.4.0 for macOS 13+ on Apple Silicon. Free, native, and open source forever.</p>
+          <div class="hero-cta">
+            <div class="btn-shimmer-wrap">
+              <a href="https://github.com/Seavik2142/KramaIsland/raw/main/dist/KramaIsland.dmg" download="KramaIsland.dmg" class="btn btn-primary btn-lg" data-download-track>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                <span>Download KramaIsland.dmg</span>
+                <span class="btn-meta">v1.4.0 · 3.3 MB</span>
+              </a>
+            </div>
+            <a href="https://github.com/Seavik2142/KramaIsland/releases" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
+              Release Notes &amp; Changelog
+            </a>
+          </div>
+        </div>
+
+        <div class="maker-card spotlight-card" data-reveal>
+          <div class="maker-avatar-ring">
+            <img src="https://github.com/Seavik2142.png?size=200" alt="Mao Seavik" width="68" height="68" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+            <span class="maker-avatar-fallback" aria-hidden="true">MS</span>
+          </div>
+          <div class="maker-info">
+            <p class="maker-label">Built &amp; maintained in the open by</p>
+            <h3>Mao Seavik</h3>
+            <p>KramaIsland started with a simple idea: the notch sits at the top of every MacBook screen, so it should work for you. Bug reports, feature requests, and PRs are always welcome.</p>
+          </div>
+          <div class="maker-actions">
+            <a href="https://github.com/Seavik2142" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">@Seavik2142 on GitHub</a>
+            <a href="https://github.com/Seavik2142/KramaIsland/issues" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">Report an Issue</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Structured Multi-Column Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand-col">
+          <a href="#top" class="brand">
+            <img src="assets/icon.png" alt="" width="28" height="28" class="brand-icon">
+            <span class="brand-name">KramaIsland</span>
+          </a>
+          <p class="footer-tagline">
+            A native, 120 fps Dynamic Island for macOS 13+ on Apple Silicon. Built from scratch in Swift, SwiftUI, AppKit &amp; CoreAudio with zero third-party dependencies.
+          </p>
+          <div class="footer-badges">
+            <span class="chip">macOS 13+</span>
+            <span class="chip">Apple Silicon</span>
+            <span class="chip">MIT License</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#compare">Why KramaIsland</a></li>
+            <li><a href="#snap-grid">Custom Snap Grid</a></li>
+            <li><a href="#showcase">Live States</a></li>
+            <li><a href="#shortcuts">Keyboard Shortcuts</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#install">Install &amp; Gatekeeper</a></li>
+            <li><a href="#privacy">Privacy &amp; Permissions</a></li>
+            <li><a href="#changelog">Changelog</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="https://github.com/Seavik2142/KramaIsland/raw/main/dist/KramaIsland.dmg" download="KramaIsland.dmg" data-download-track>Download .dmg (v1.4.0)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Open Source</h4>
+          <ul>
+            <li><a href="https://github.com/Seavik2142/KramaIsland" target="_blank" rel="noopener noreferrer">GitHub Repository ↗</a></li>
+            <li><a href="https://github.com/Seavik2142/KramaIsland/releases" target="_blank" rel="noopener noreferrer">GitHub Releases ↗</a></li>
+            <li><a href="https://github.com/Seavik2142/KramaIsland/issues" target="_blank" rel="noopener noreferrer">Report an Issue ↗</a></li>
+            <li><a href="#source">Build from Source</a></li>
+            <li><a href="https://github.com/Seavik2142" target="_blank" rel="noopener noreferrer">Mao Seavik (@Seavik2142) ↗</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 <a href="https://github.com/Seavik2142" target="_blank" rel="noopener noreferrer">Mao Seavik</a> · Released under the MIT License.</span>
+        <span>Pure Swift · 100% On-Device · No Telemetry</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive Screenshot Lightbox Modal -->
+  <div class="lightbox-backdrop" id="lightbox-backdrop" hidden>
+    <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+      <div class="lightbox-bar">
+        <div class="lightbox-meta">
+          <strong id="lightbox-title">Screen Preview</strong>
+          <span id="lightbox-desc"></span>
+        </div>
+        <div class="lightbox-controls">
+          <button type="button" class="lightbox-nav-btn" id="lightbox-prev" aria-label="Previous screenshot">←</button>
+          <span class="lightbox-counter" id="lightbox-counter">1 / 5</span>
+          <button type="button" class="lightbox-nav-btn" id="lightbox-next" aria-label="Next screenshot">→</button>
+          <button type="button" class="lightbox-close-btn" id="lightbox-close" aria-label="Close lightbox"><kbd>ESC</kbd></button>
+        </div>
+      </div>
+      <div class="lightbox-stage">
+        <img id="lightbox-img" src="assets/compact.png" alt="">
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive KramaIsland Mini-Launcher Modal (⌘K) -->
+  <div class="cmd-backdrop" id="cmd-backdrop" hidden>
+    <div class="cmd-dialog" role="dialog" aria-modal="true" aria-labelledby="cmd-dialog-title">
+      <div class="cmd-input-row">
+        <svg class="cmd-search-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label class="sr-only" for="cmd-input" id="cmd-dialog-title">KramaIsland Interactive Launcher</label>
+        <input type="text" id="cmd-input" class="cmd-input" placeholder="Try '5 km to mi', '100 f to c', '24 * 60', or search commands…" autocomplete="off" spellcheck="false">
+        <button type="button" class="cmd-esc" id="cmd-close" aria-label="Close launcher"><kbd>ESC</kbd></button>
+      </div>
+      <div class="cmd-list" id="cmd-list" role="listbox" aria-label="Launcher results"></div>
+      <div class="cmd-footer">
+        <span><kbd>↑</kbd> <kbd>↓</kbd> Navigate · <kbd>↩</kbd> Run · Live preview of KramaIsland's <strong>⌥ Space</strong> engine</span>
+        <span class="cmd-brand-tag">KramaIsland v1.4.0</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
